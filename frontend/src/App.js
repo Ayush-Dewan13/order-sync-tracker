@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './App.css';
 
+// Get the API URL from environment variables
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001';
+
 const PlatformStats = ({ stats }) => (
   <div className="platform-stats">
     {Object.entries(stats).map(([platform, data]) => (
@@ -55,7 +58,7 @@ const App = () => {
   const fetchOrders = async () => {
     setLoading(true);
     try {
-      const res = await axios.get('http://localhost:5001/api/orders');
+      const res = await axios.get(`${API_URL}/api/orders`);
       setOrders(res.data.orders);
       setStats(res.data.stats);
       setError(null);
@@ -69,7 +72,7 @@ const App = () => {
   const syncOrders = async (platform) => {
     setLoading(true);
     try {
-      await axios.post('http://localhost:5001/api/orders/sync', {
+      await axios.post(`${API_URL}/api/orders/sync`, {
         platform,
         orders: Array(5).fill(null).map(() => ({
           orderId: `${platform.toUpperCase()}-${Math.floor(Math.random() * 10000)}`
@@ -86,7 +89,7 @@ const App = () => {
   const retryOrder = async (id) => {
     setLoading(true);
     try {
-      await axios.post(`http://localhost:5001/api/orders/retry/${id}`);
+      await axios.post(`${API_URL}/api/orders/retry/${id}`);
       fetchOrders();
     } catch (err) {
       setError('Failed to retry order. Please try again.');

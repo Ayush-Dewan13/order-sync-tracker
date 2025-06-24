@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: order-sync-tracker-backend
+    env: node
+    buildCommand: npm install
+    startCommand: node backend/server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 8080
+      - key: MONGO_URI
+        sync: false # You'll set this in Render dashboard 

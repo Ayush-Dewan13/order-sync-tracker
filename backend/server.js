@@ -8,7 +8,17 @@ const orderRoutes = require('../routes/orderRoutes');
 const app = express();
 const PORT = process.env.PORT || 5001;
 
-app.use(cors());
+// Configure CORS for production
+const corsOptions = {
+  origin: process.env.NODE_ENV === 'production'
+    ? ['https://order-sync-tracker.vercel.app'] // Replace with your actual Vercel domain
+    : 'http://localhost:3000',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use('/api/orders', orderRoutes);
